@@ -1,16 +1,16 @@
 extends layout
 
 block content
-  link(rel="stylesheet", herf='/stylesheets/index.css')
+    link(rel="stylesheet" herf='/stylesheets/index.css')
 
-  h1 FSE Chat Room
+    h1 FSE Chat Room
 
-  .login-container
-    form.login-form(action="/login", method="post")
-      label(for="username")  Username 
-      input#username(type="text", name="username", required)
-      label(for="password") Password 
-      input#password(type="text", name="password", required) 
-      .buttons
-          button.login-button(type="submit") Login
-          button.register-button(type="button") Register
+    .login-container
+        form.login-form(action="/login" method="post")
+            label(for="username")  Username 
+            input#username(type="text" name="username", required)
+            label(for="password") Password 
+            input#password(type="text" name="password", required) 
+            .buttons
+                button.login-button(type="submit") Login
+                button.register-button(type="button") Register
