@@ -74,3 +74,10 @@ button {
   background-color: #5ca5f1;
   color: black;
 }
+
+form.register-form {
+  display: inline-block;
+  text-align: left;
+  width: 100%;
+}
+
