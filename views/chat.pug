@@ -5,3 +5,15 @@ html(lang='en')
         title Chat Room
         link(rel='stylesheet' href='/stylesheets/chat.css')
     body
+        block content
+            .chat-container
+                .top-bar
+                    h1 FSE Chat Room
+                    a#logout-button(href="/") Logout
+                #messages
+                    
+                .input-container
+                    input#message-input(type="text", placeholder="Type your message...")
+            
+                .bottom-bar
+                    button#send-button Send
