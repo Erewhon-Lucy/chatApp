@@ -13,7 +13,14 @@ $(() => {
         var password = $("#password").val();
 
         $.post("/login", { username, password }, function(data) {
-            // 处理响应，可能需要重定向或显示消息
+            if (data == "Login successful") {
+                alert("Login successful");
+                window.location.href = "/chat";
+            } else if (data == "Invalid credentials") {
+                alert("Login failed! Please try again!");
+            } else {
+                alert("Error logging in");
+            }
         });
     })
 
