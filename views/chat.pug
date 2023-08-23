@@ -8,12 +8,17 @@ html(lang='en')
         block content
             .chat-container
                 .top-bar
-                    h1 FSE Chat Room
-                    a#logout-button(href="/") Logout
-                #messages
+                    h2 FSE Chat Room
+                    button#logout-button(type="button") Logout 
+                .chat-messages
+                    .chat-message
+                        .user-time 
+                            h3 Username
+                            span Time
+                        p.message-text Sample chat message
+                .chat-input
+                    textarea#message(placeholder="Type your message...", rows="8")
                     
-                .input-container
-                    input#message-input(type="text", placeholder="Type your message...")
-            
-                .bottom-bar
-                    button#send-button Send
+                .bottom-bar 
+                    button#post-button(type="button") Post
+        
