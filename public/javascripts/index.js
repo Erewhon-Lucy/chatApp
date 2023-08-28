@@ -13,10 +13,10 @@ $(() => {
         var password = $("#password").val();
 
         $.post("/login", { username, password }, function(data) {
-            if (data == "Login successful") {
+            if (data === "Login successful") {
                 alert("Login successful");
                 window.location.href = "/chat";
-            } else if (data == "Invalid credentials") {
+            } else if (data === "Invalid credentials") {
                 alert("Login failed! Please try again!");
             } else {
                 alert("Error logging in");
