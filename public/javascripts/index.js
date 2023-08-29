@@ -7,21 +7,39 @@ $(() => {
     });
 
     $("form.login-form").on("submit", function(event) {
-        event.preventDefault();
+        event.preventDefault();// add it to prevent the page from reloading!!
+
         console.log('login form submitted');
         var username = $("#username").val();
         var password = $("#password").val();
 
-        $.post("/login", { username, password }, function(data) {
-            if (data === "Login successful") {
-                alert("Login successful");
-                window.location.href = "/chat";
-            } else if (data === "Invalid credentials") {
-                alert("Login failed! Please try again!");
-            } else {
+        // error in handling !!!! why!!!!!
+        // $.post("/login", { username, password }, function(data) {
+        //     console.log("Server response:", data);
+        //     if (data.code === 200) {
+        //         alert("Login successful");
+        //         window.location.href = "/chat";
+        //     } else {
+        //         alert("Invalid login");
+        //     }
+        // });
+        axios.post("/login", { username, password })
+            .then(function(response) {
+                var data = response.data;
+                console.log("Server response:", data);
+
+                if (data.code === 200) {
+                    alert("Login successful");
+                    window.location.href = "/chat";
+                } else {
+                    alert("Invalid login");
+                
+                }
+            })
+            .catch(function(error) {
+                console.error("Error logging in:", error);
                 alert("Error logging in");
-            }
-        });
+            })
     })
 
     $("form.register-form").on("submit", function(event) {
@@ -30,7 +48,18 @@ $(() => {
         const newPassword = $("#new-password").val();
         
         $.post("/register", { newUsername, newPassword }, function(data) {
-            // 处理响应，可能需要重定向或显示消息
+            
+            if (data === "Registration successful") {
+                alert("Registration successful");
+                window.location.href = "/chat";
+                
+            } else if (data === "Username already exists") {
+                alert("Username already exists");
+            
+            } else {
+                alert("Error registering user");
+            
+            }
         });
     });
 })
