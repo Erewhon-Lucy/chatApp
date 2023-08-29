@@ -61,9 +61,13 @@ router.post('/login', async (req, res) => {
     try {
         const user = await User.findOne({ username });
 
+        // console.log("Find user:", user);
+
         if (user && user.password === password) {
+            // console.log("match!!!");
             res.status(200).json({ code: 200, message: "Login successful" });
         } else {
+            // console.log("no match!!")
             res.status(401).json({ code: 401, message: "Invalid credentials" });
         }
     } catch (error) {
