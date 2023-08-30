@@ -3,7 +3,12 @@ const mongoose = require('mongoose');
 const chatMessageSchema = new mongoose.Schema({
     username: String,
     message: String,
-    timestamp: String
+    timestamp: {
+        type: Date,
+        default: Date.now
+    }
 });
 
-const User = mongoose.model('ChatMessage', chatMessageSchema);
+const ChatMessage = mongoose.model('ChatMessage', chatMessageSchema);
+
+module.exports = ChatMessage;
