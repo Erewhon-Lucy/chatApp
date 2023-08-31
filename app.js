@@ -5,7 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const $ = require('jquery');
 const mongoose = require('mongoose');
-const axios = require('axios');
+var http = require('http').Server(app)
+var io = require('socket.io')(http)
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -59,5 +60,9 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+io.on('connection', (socket) => {
+  console.log('a user connected');
+})
 
 module.exports = app;
