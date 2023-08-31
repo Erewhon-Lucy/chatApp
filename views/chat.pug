@@ -5,6 +5,8 @@ html(lang='en')
         title Chat Room
         link(rel='stylesheet' href='/stylesheets/chat.css')
         script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js") 
+        script(src="/javascripts/jquery-3.7.0.min.js")
+        script(src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js")
     body
         block content
             .chat-container
@@ -22,4 +24,5 @@ html(lang='en')
                     
                 .bottom-bar 
                     button#post-button(type="button") Post
+        script(src="/javascripts/chat.js")
         
