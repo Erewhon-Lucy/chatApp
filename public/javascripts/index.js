@@ -13,7 +13,7 @@ $(() => {
         var username = $("#username").val();
         var password = $("#password").val();
 
-        // error in handling !!!! why!!!!!
+        // error in handling
         // $.post("/login", { username, password }, function(data) {
         //     console.log("Server response:", data);
         //     if (data.code === 200) {
@@ -29,7 +29,10 @@ $(() => {
                 console.log("Server response:", data);
 
                 if (data.code === 200) {
+                    sessionStorage.setItem("username", username);
+                    console.log("username in storage:", sessionStorage.getItem("username"));
                     alert("Login successful");
+                    
                     window.location.href = "/chat";
                 } else {
                     alert("Invalid login");
