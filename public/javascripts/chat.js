@@ -1,30 +1,27 @@
 var socket = io();
-$(document).ready(function() {
-    console.log('chat page loaded');
-    const chatMessages = $('.chat-messages');
-    const messageInput = $('#message');
-    const postButton = $('#post-button');
-    var username = sessionStorage.getItem("username");
+const chatMessages = $('.chat-messages');
+const messageInput = $('#message');
+const postButton = $('#post-button');
 
-    router.get('/history', async (req, res) => {
-        try {
-            const history = await ChatMessage.find().sort({ timestamp: 1 });
-            res.json(history);
-        } catch (error) {
-            console.error("Error fetching chat history:", error);
-            res.status(500).json({ message: "Error fetching chat history" });
-        }
-    });
+$(() => {
+    console.log('chat page loaded');
+
+    var usernamestorage = sessionStorage.getItem("username");
+    console.log("usernamestorage: " + usernamestorage);
+
+    getMessages();
 
     postButton.on('click', () => {
-        const message = messageInput.val().trim();
-        if (message !== '') {
-            $.post('/chat/send', { username: 'User', message }, (data) => {
-                if (data.success) {
-                    messageInput.val('');
-                    fetchChatHistory();
-                }
-            });
+        var message = messageInput.val();
+        if (message.length > 0) {
+            var message = {
+                username: usernamestorage,
+                message: message,
+                timestamp: new Date().toISOString()
+            }
+            postMessage(message);
+            addMessageToPage(message);
+            messageInput.val();
         }
     });
 
@@ -33,37 +30,27 @@ $(document).ready(function() {
         window.location.href = "/";
     });
 })
-// $(() => {
-//     console.log('chat page loaded');
-//     const chatMessages = $('.chat-messages');
-//     const messageInput = $('#message');
-//     const postButton = $('#post-button');
-//     var username = sessionStorage.getItem("username");
+socket.on('message', addMessage)
 
-//     router.get('/history', async (req, res) => {
-//         try {
-//             const history = await ChatMessage.find().sort({ timestamp: 1 });
-//             res.json(history);
-//         } catch (error) {
-//             console.error("Error fetching chat history:", error);
-//             res.status(500).json({ message: "Error fetching chat history" });
-//         }
-//     });
+function postMessage(message) {
+    $.post('http://localhost:3000/chat/send', message);
+}
 
-//     postButton.on('click', () => {
-//         const message = messageInput.val().trim();
-//         if (message !== '') {
-//             $.post('/chat/send', { username: 'User', message }, (data) => {
-//                 if (data.success) {
-//                     messageInput.val('');
-//                     fetchChatHistory();
-//                 }
-//             });
-//         }
-//     });
+function getMessages() {
+    $.get('http://localhost:3000/chat/messages', (chatMessages) => {
+        chatMessages.forEach(message => {
+            addMessageToPage(message);
+        })
+    
+    })
+}
 
-//     $("#logout-button").on("click", function() {
-//         sessionStorage.removeItem("username");
-//         window.location.href = "/";
-//     });
-// })
+function addMessageToPage(message) {
+    const userTimeDiv = $('<div>').addClass('user-time');
+    const userHeading = $('<h3>').text(message.username);
+    const timeSpan = $('<span>').text(message.timestamp);
+    userTimeDiv.append(userHeading, timeSpan);
+    const messageParagraph = $('<p>').addClass('message-text').text(message.message);
+    const chatMessageDiv = $('<div>').addClass('chat-message').append(userTimeDiv, messageParagraph);
+    chatMessages.append(chatMessageDiv);
+}

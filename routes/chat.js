@@ -6,51 +6,42 @@ var app = express();
 var http = require('http').Server(app)
 var io = require('socket.io')(http)
 
+
 router.get('/', async (req, res) => {
-	try {
-        const messages = await ChatMessage.find({}).exec();
-        res.render('chat', { messages });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Error fetching chat messages');
-    }
+	res.render('chat');
 })
 
-router.get('/history', async (req, res) => {
+router.get('/messages', async (req, res) => {
 	try {
-		const messages = await ChatMessage.find().sort({ timestamp: 1 });
-		res.json(messages);
+		const messages = await ChatMessage.find({});
+		res.send(messages);
 	} catch (error) {
-		res.status(500).json({ error: 'Error fetching chat history' });
+		res.status(500).send(error);
+	}
+})
+
+router.post('/send', async (req, res) => {
+	try {
+		const { username, message } = req.body;
+		const chatMessage = new ChatMessage({ username, message });
+		await chatMessage.save();
+		res.send('Message sent');
+
+		io.emit('message', {
+			username: username,
+			message: message,
+			timestamp: chatMessage.timestamp
+		});
+
+		res.json({ success: true });
+
+	} catch (err) {
+
 	}
 });
 
-router.post('/send', async (req, res) => {
-	// const { username, message } = req.body;
-	// try {
-	// 	const newMessage = new ChatMessage({
-	// 		username,
-	// 		message,
-	// 		timestamp: new Date()
-	// 	});
-	// 	await newMessage.save();
-	// 	res.json({ success: true });
-	// } catch (error) {
-	// 	res.status(500).json({ error: 'Error sending message' });
-	// }
-	var message = req.body.message;
-	message.save(function (err, message) {
-		if (err) {
-			console.log(err);
-			sendStatus(500);
-		}
-		io.emit('message', message);
-		res.sendStatus(200);
-	})
-});
-
-io.on('connection', (socket) => {
-	console.log(' user connected')
-})
+// io.on('connection', (socket) => {
+// 	console.log(' user connected')
+// })
 
 module.exports = router;
