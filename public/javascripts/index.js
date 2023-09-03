@@ -54,7 +54,7 @@ $(() => {
             
             if (data === "Registration successful") {
                 alert("Registration successful");
-                // window.location.href = "/chat";
+                window.location.href = "/chat";
                 // res.render('chat');
                 
             } else if (data === "Username already exists") {
