@@ -61,8 +61,20 @@ function getMessages() {
 function addMessageToPage(message) {
     const userTimeDiv = $('<div>').addClass('user-time');
     const userHeading = $('<h3>').text(message.username);
-    const timeSpan = $('<span>').text(message.timestamp);
+
+    const time = new Date(message.timestamp);
+    const formattedTimestamp = time.toLocaleDateString('en-US', {
+        month: '2-digit',
+        day: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    });
+
+    const timeSpan = $('<span>').text(formattedTimestamp);
     userTimeDiv.append(userHeading, timeSpan);
+    
     const messageParagraph = $('<p>').addClass('message-text').text(message.message);
     const chatMessageDiv = $('<div>').addClass('chat-message').append(userTimeDiv, messageParagraph);
     chatMessages.append(chatMessageDiv);

@@ -8,9 +8,9 @@ block content
     .login-container
         form.login-form(action="/login" method="post")
             label(for="username")  Username 
-            input#username(type="text" name="username", required)
+            input#username(type="text" name="username")
             label(for="password") Password 
-            input#password(type="password" name="password", required) 
+            input#password(type="password" name="password") 
             .buttons
                 button.login-button(type="submit") Login
                 button.register-button(type="button" id="show-register-form") Register
