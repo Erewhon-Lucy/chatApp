@@ -5,7 +5,7 @@ const messageInput = $('#message');
 const postButton = $('#post-button');
 
 socket.on('connect', () => {
-    console.log('socket connected');
+    console.log('Client Socket.io version:', socket.version);
 });
 
 $(() => {

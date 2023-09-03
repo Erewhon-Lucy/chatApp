@@ -16,12 +16,9 @@ const app = express();
 // });
 
 const http = require('http');
-const server = http.createServer(app);
+const httpServer = http.createServer(app);
 const { Server } = require("socket.io");
-const io = new Server(server);
-server.listen(3010, () => {
-  console.log('listening on *:3010');
-});
+const io = new Server(httpServer);
 
 io.on('connection', (socket) => {
   console.log('a user connected');
@@ -29,7 +26,7 @@ io.on('connection', (socket) => {
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var chatsRouter = require('./routes/chat');
+var chatsRouter = require('./routes/chat')(io);
 const { error } = require('console');
 
 // view engine setup
@@ -76,6 +73,10 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+httpServer.listen(3010, () => {
+  console.log('listening on *:3010');
 });
 
 module.exports = app;
