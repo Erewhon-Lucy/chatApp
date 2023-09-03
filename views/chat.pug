@@ -1,0 +1,28 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset='utf-8')
+        title Chat Room
+        link(rel='stylesheet' href='/stylesheets/chat.css')
+        script(src="/javascripts/jquery-3.7.0.min.js")
+        script(src="https://cdn.socket.io/4.7.2/socket.io.min.js") 
+        script(src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js")
+    body
+        block content
+            .chat-container
+                .top-bar
+                    h2 FSE Chat Room
+                    button#logout-button(type="button") Logout 
+                .chat-messages
+                    .chat-message
+                        .user-time 
+                            h3 Username
+                            span Time
+                        p.message-text Sample chat message
+                .chat-input
+                    textarea#message(placeholder="Type your message...", rows="8")
+                    
+                .bottom-bar 
+                    button#post-button(type="button") Post
+        script(src="/javascripts/chat.js")
+        

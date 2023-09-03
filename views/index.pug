@@ -1,5 +1,24 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+    link(rel="stylesheet" herf='/stylesheets/index.css')
+
+    h1 FSE Chat Room
+
+    .login-container
+        form.login-form(action="/login" method="post")
+            label(for="username")  Username 
+            input#username(type="text" name="username", required)
+            label(for="password") Password 
+            input#password(type="password" name="password", required) 
+            .buttons
+                button.login-button(type="submit") Login
+                button.register-button(type="button" id="show-register-form") Register
+    
+        form.register-form(action="/register" method="post", style="display: none;")
+            label(for="new-username") New Username
+            input#new-username(type="text" name="newUsername", required)
+            label(for="new-password") New Password
+            input#new-password(type="password" name="newPassword", required)
+            .buttons
+                button.register-button(type="submit") Register
