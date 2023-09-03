@@ -5,15 +5,32 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const $ = require('jquery');
 const mongoose = require('mongoose');
-var http = require('http').Server(app)
-var io = require('socket.io')(http)
+
+
+const app = express();
+
+// const http = require('http').Server(app);
+// const io = require('socket.io')(http);
+// const server = http.listen(3010, () => {
+//   console.log("Server is listening on port", server.address().port);
+// });
+
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+server.listen(3010, () => {
+  console.log('listening on *:3010');
+});
+
+io.on('connection', (socket) => {
+  console.log('a user connected');
+});
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var chatsRouter = require('./routes/chat');
 const { error } = require('console');
-
-var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -60,9 +77,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-io.on('connection', (socket) => {
-  console.log('a user connected');
-})
 
 module.exports = app;

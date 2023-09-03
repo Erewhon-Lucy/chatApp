@@ -1,7 +1,12 @@
 var socket = io();
+
 const chatMessages = $('.chat-messages');
 const messageInput = $('#message');
 const postButton = $('#post-button');
+
+socket.on('connect', () => {
+    console.log('socket connected');
+});
 
 $(() => {
     console.log('chat page loaded');
@@ -12,16 +17,18 @@ $(() => {
     getMessages();
 
     postButton.on('click', () => {
-        var message = messageInput.val();
-        if (message.length > 0) {
-            var message = {
+        var content = messageInput.val();
+        // console.log("content: " + content);
+        if (content.length > 0) {
+            var messageData = {
                 username: usernamestorage,
-                message: message,
+                message: content,
                 timestamp: new Date().toISOString()
             }
-            postMessage(message);
-            addMessageToPage(message);
-            messageInput.val();
+            socket.emit('add-message', messageData);
+            console.log("client event emitted");
+            postMessage(messageData);
+            // addMessageToPage(messageData);
         }
     });
 
@@ -30,14 +37,20 @@ $(() => {
         window.location.href = "/";
     });
 })
-socket.on('message', addMessage)
+
+socket.on('add-message', (message) => {
+    console.log('message received');
+    addMessageToPage(message);
+    messageInput.val('');
+    scrollToBottom();
+});
 
 function postMessage(message) {
-    $.post('http://localhost:3000/chat/send', message);
+    $.post('http://localhost:3010/chat/send', message);
 }
 
 function getMessages() {
-    $.get('http://localhost:3000/chat/messages', (chatMessages) => {
+    $.get('http://localhost:3010/chat/messages', (chatMessages) => {
         chatMessages.forEach(message => {
             addMessageToPage(message);
         })
@@ -53,4 +66,8 @@ function addMessageToPage(message) {
     const messageParagraph = $('<p>').addClass('message-text').text(message.message);
     const chatMessageDiv = $('<div>').addClass('chat-message').append(userTimeDiv, messageParagraph);
     chatMessages.append(chatMessageDiv);
+}
+
+function scrollToBottom() {
+    chatMessages.scrollTop(chatMessages[0].scrollHeight);
 }

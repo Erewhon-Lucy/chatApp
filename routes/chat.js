@@ -2,10 +2,24 @@ var express = require('express');
 var router = express.Router();
 const ChatMessage = require('../models/chatMessage');
 const { isObjectIdOrHexString } = require('mongoose');
-var app = express();
-var http = require('http').Server(app)
-var io = require('socket.io')(http)
+const io = require('socket.io')();
 
+io.on("connection", (socket) => {
+  	console.log("socket connected");
+	socket.on("add-message", async (message) => {
+		try {
+            // 获取最新添加到数据库的一条消息
+            const latestMessage = await ChatMessage.findOne().sort({ timestamp: -1 }).lean();
+            if (latestMessage) {
+                // 广播给所有客户端
+                io.emit('add-message', latestMessage);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+	})
+
+});
 
 router.get('/', async (req, res) => {
 	res.render('chat');
@@ -25,23 +39,16 @@ router.post('/send', async (req, res) => {
 		const { username, message } = req.body;
 		const chatMessage = new ChatMessage({ username, message });
 		await chatMessage.save();
-		res.send('Message sent');
 
-		io.emit('message', {
-			username: username,
-			message: message,
-			timestamp: chatMessage.timestamp
-		});
+		io.emit('add-message');
 
 		res.json({ success: true });
 
-	} catch (err) {
 
+	} catch (err) {
+		console.error(err);
+        res.status(500).json({ success: false, error: 'Message not sent' });
 	}
 });
-
-// io.on('connection', (socket) => {
-// 	console.log(' user connected')
-// })
 
 module.exports = router;
