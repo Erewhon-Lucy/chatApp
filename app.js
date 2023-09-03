@@ -25,7 +25,6 @@ io.on('connection', (socket) => {
 });
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var chatsRouter = require('./routes/chat')(io);
 const { error } = require('console');
 
@@ -40,7 +39,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/chat', chatsRouter);
 
 // jquery
