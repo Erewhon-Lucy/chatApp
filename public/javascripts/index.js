@@ -53,6 +53,7 @@ $(() => {
         $.post("/register", { newUsername, newPassword }, function(data) {
             
             if (data === "Registration successful") {
+                sessionStorage.setItem("username", newUsername);
                 alert("Registration successful");
                 window.location.href = "/chat";
                 // res.render('chat');

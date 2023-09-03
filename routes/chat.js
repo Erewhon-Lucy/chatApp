@@ -10,7 +10,7 @@ module.exports = function (io) {
 			try {
 				const { username, message: msg, timestamp } = message;
 				const chatMessage = new ChatMessage({ username, message: msg, timestamp });
-				await chatMessage.save();
+				// await chatMessage.save();
 				io.emit('add-message', {
 					username: username,
 					message: msg,
